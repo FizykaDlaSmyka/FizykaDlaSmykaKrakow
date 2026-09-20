@@ -1,0 +1,2327 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fizyka dla Smyka Kraków - Interaktywne Pokazy Naukowe dla Dzieci</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --primary: #E85A4F;
+            --primary-dark: #D44A3F;
+            --secondary: #7EC8A3;
+            --accent: #F4D35E;
+            --dark: #2C3E50;
+            --light: #F0F7F4;
+            --white: #FFFFFF;
+            --gradient-1: linear-gradient(135deg, #A8E6CF 0%, #7EC8A3 100%);
+            --gradient-2: linear-gradient(135deg, #FFB6C1 0%, #FF8FAB 100%);
+            --gradient-3: linear-gradient(135deg, #87CEEB 0%, #5DADE2 100%);
+            --gradient-4: linear-gradient(135deg, #98D8C8 0%, #6BBF8A 100%);
+            --gradient-5: linear-gradient(135deg, #F7DC6F 0%, #F4D35E 100%);
+            --shadow-soft: 0 10px 40px rgba(0,0,0,0.1);
+            --shadow-hover: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--dark);
+            overflow-x: hidden;
+            background: var(--light);
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-particle linear infinite;
+        }
+
+        @keyframes float-particle {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.4s ease;
+            background: transparent;
+        }
+
+        .navbar.scrolled {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: color 0.3s;
+        }
+
+        .navbar.scrolled .logo {
+            color: var(--dark);
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .navbar.scrolled .nav-links a {
+            color: var(--dark);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .phone-btn {
+            background: var(--primary);
+            color: var(--white) !important;
+            padding: 12px 25px !important;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255,107,53,0.4);
+            transition: all 0.3s !important;
+        }
+
+        .phone-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255,107,53,0.5);
+        }
+
+        .phone-btn::after {
+            display: none !important;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 30px;
+            height: 3px;
+            background: var(--white);
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .navbar.scrolled .hamburger span {
+            background: var(--dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: var(--dark);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 100px 20px 60px;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 80%, rgba(102,126,234,0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(240,93,251,0.2) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(78,205,196,0.15) 0%, transparent 60%);
+        }
+
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 10px 25px;
+            border-radius: 50px;
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hero-badge i {
+            animation: sparkle 2s ease infinite;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .hero h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            color: var(--white);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.8s ease 0.6s both;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255,107,53,0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            padding: 18px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid rgba(255,255,255,0.2);
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Floating elements in hero */
+        .float-element {
+            position: absolute;
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            animation: float 6s ease-in-out infinite;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+        }
+
+        .float-1 {
+            top: 20%;
+            left: 10%;
+            background: rgba(102,126,234,0.2);
+            border: 1px solid rgba(102,126,234,0.3);
+            color: #a5b4fc;
+            animation-delay: 0s;
+        }
+
+        .float-2 {
+            top: 30%;
+            right: 8%;
+            background: rgba(240,93,251,0.2);
+            border: 1px solid rgba(240,93,251,0.3);
+            color: #f5c6ff;
+            animation-delay: 1s;
+        }
+
+        .float-3 {
+            bottom: 25%;
+            left: 8%;
+            background: rgba(78,205,196,0.2);
+            border: 1px solid rgba(78,205,196,0.3);
+            color: #a8f0e8;
+            animation-delay: 2s;
+        }
+
+        .float-4 {
+            bottom: 20%;
+            right: 12%;
+            background: rgba(255,230,109,0.2);
+            border: 1px solid rgba(255,230,109,0.3);
+            color: #fff5b8;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 20px;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--white);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .about-image::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: 20px;
+            bottom: 20px;
+            background: var(--gradient-1);
+            border-radius: 30px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .about-content h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about-content p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-top: 30px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.blue { background: rgba(102,126,234,0.1); color: #667eea; }
+        .feature-icon.pink { background: rgba(240,93,251,0.1); color: #f093fb; }
+        .feature-icon.green { background: rgba(67,233,123,0.1); color: #43e97b; }
+
+        /* Modules Section */
+        .modules {
+            background: linear-gradient(180deg, #f8f9ff 0%, #fff5f5 100%);
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .module-card {
+            background: var(--white);
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .module-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .module-image {
+            height: 220px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .module-card:hover .module-image img {
+            transform: scale(1.1);
+        }
+
+        .module-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .badge-light { background: var(--gradient-1); }
+        .badge-sound { background: var(--gradient-2); }
+        .badge-air { background: var(--gradient-3); }
+        .badge-magnet { background: var(--gradient-4); }
+        .badge-dryice { background: var(--gradient-5); }
+
+        .module-content {
+            padding: 30px;
+        }
+
+        .module-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .icon-light { background: var(--gradient-1); }
+        .icon-sound { background: var(--gradient-2); }
+        .icon-air { background: var(--gradient-3); }
+        .icon-magnet { background: var(--gradient-4); }
+        .icon-dryice { background: var(--gradient-5); }
+
+        .module-content h3 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .module-content p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .experiment-list {
+            list-style: none;
+        }
+
+        .experiment-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .experiment-list li i {
+            color: var(--primary);
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        .module-price {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-tag {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .price-tag span {
+            font-size: 1rem;
+            color: #999;
+            font-weight: 400;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            background: var(--white);
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            position: relative;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 2px;
+            z-index: 0;
+        }
+
+        .step-card {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 0 auto 25px;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.2);
+        }
+
+        .step-card:nth-child(2) .step-number { border-color: var(--secondary); color: var(--secondary); }
+        .step-card:nth-child(3) .step-number { border-color: #667eea; color: #667eea; }
+        .step-card:nth-child(4) .step-number { border-color: #f093fb; color: #f093fb; }
+
+        .step-card h3 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        .step-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255,107,53,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .pricing .section-title {
+            color: var(--white);
+        }
+
+        .pricing .section-desc {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .pricing-card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 25px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.08);
+        }
+
+        .pricing-card.featured {
+            border: 2px solid var(--primary);
+            transform: scale(1.05);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+
+        .pricing-label {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .pricing-card h3 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .pricing-amount {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .pricing-amount span {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pricing-features li i {
+            color: var(--secondary);
+        }
+
+        /* Contact Section */
+        .contact {
+            background: var(--white);
+            position: relative;
+        }
+
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .contact-info h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-info > p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+            background: var(--light);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .contact-item-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 18px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--white);
+            flex-shrink: 0;
+        }
+
+        .contact-item:nth-child(2) .contact-item-icon { background: var(--gradient-2); }
+        .contact-item:nth-child(3) .contact-item-icon { background: var(--gradient-3); }
+
+        .contact-item h4 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .contact-item p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .phone-highlight {
+            display: block;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-top: 5px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .phone-highlight:hover {
+            color: var(--primary-dark);
+        }
+
+        .contact-visual {
+            position: relative;
+        }
+
+        .contact-visual img {
+            width: 100%;
+            border-radius: 30px;
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* FAQ Section */
+        .faq {
+            background: linear-gradient(180deg, #fff5f5 0%, #f8f9ff 100%);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--white);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .faq-question {
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+
+        .faq-question i {
+            color: var(--primary);
+            transition: transform 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 30px 25px;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: var(--white);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: var(--light);
+            border-radius: 25px;
+            padding: 35px;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .testimonial-card::before {
+            content: '';
+            font-family: 'Fredoka', sans-serif;
+            font-size: 5rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 25px;
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .author-info h4 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .author-info p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .stars {
+            color: var(--accent);
+            margin-bottom: 15px;
+        }
+
+        /* CTA Banner */
+        .cta-banner {
+            background: var(--gradient-1);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .cta-banner::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-banner h2 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .cta-banner p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .cta-phone {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: var(--white);
+            color: var(--dark);
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .cta-phone:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .cta-phone i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 60px 20px 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-brand p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .footer-links h4 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            color: rgba(255,255,255,0.4);
+            font-size: 0.9rem;
+        }
+
+        /* Scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: var(--white);
+            z-index: 1001;
+            padding: 80px 30px 30px;
+            transition: right 0.4s ease;
+            box-shadow: -10px 0 40px rgba(0,0,0,0.2);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu .nav-links {
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .mobile-menu .nav-links a {
+            color: var(--dark);
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            display: block;
+        }
+
+        .mobile-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .mobile-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .about-grid,
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .about-image::before {
+                display: none;
+            }
+
+            .steps-container {
+                flex-direction: column;
+            }
+
+            .steps-container::before {
+                display: none;
+            }
+
+            .step-card {
+                margin-bottom: 30px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-stats {
+                gap: 20px;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-10px);
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .float-element {
+                display: none;
+            }
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(255,107,53,0.4);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255,107,53,0.5);
+        }
+
+        /* Pulse animation for phone */
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255,107,53,0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(255,107,53,0); }
+        }
+
+        .pulse-phone {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-atom"></i>
+                Fizyka dla Smyka
+            </a>
+            <ul class="nav-links">
+                <li><a href="#o-nas">O nas</a></li>
+                <li><a href="#moduly">Moduły</a></li>
+                <li><a href="#jak-to-dziala">Jak to działa</a></li>
+                <li><a href="#oferta">Oferta</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#kontakt" class="phone-btn pulse-phone">
+                    <i class="fas fa-phone"></i>
+                    605 202 719
+                </a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="close-menu" id="closeMenu"><i class="fas fa-times"></i></div>
+        <ul class="nav-links">
+            <li><a href="#o-nas">O nas</a></li>
+            <li><a href="#moduly">Moduły</a></li>
+            <li><a href="#jak-to-dziala">Jak to działa</a></li>
+            <li><a href="#oferta">Oferta</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+            <li><a href="tel:605202719" class="phone-btn" style="margin-top: 20px;">
+                <i class="fas fa-phone"></i>
+                Zadzwoń: 605 202 719
+            </a></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        
+        <div class="float-element float-1">
+            <i class="fas fa-lightbulb"></i> Światło
+        </div>
+        <div class="float-element float-2">
+            <i class="fas fa-music"></i> Dźwięk
+        </div>
+        <div class="float-element float-3">
+            <i class="fas fa-wind"></i> Powietrze
+        </div>
+        <div class="float-element float-4">
+            <i class="fas fa-magnet"></i> Magnes
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-star"></i>
+                Pokazy naukowe dla dzieci w Krakowie
+            </div>
+            <h1>
+                Fizyka dla Smyka<br>
+                <span>Kraków</span>
+            </h1>
+            <p class="hero-subtitle">
+                Interaktywne warsztaty naukowe, w których każde dziecko staje się małym naukowcem. 
+                Przyjeżdżamy do Twojej placówki z profesjonalnym sprzętem i pasją do odkrywania!
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Modułów tematycznych</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">do 8</div>
+                    <div class="stat-label">Doświadczeń na pokaz</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3-10</div>
+                    <div class="stat-label">Wiek dzieci</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Aktywny udział</div>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <a href="tel:605202719" class="btn-primary pulse-phone">
+                    <i class="fas fa-phone"></i>
+                    Zarezerwuj termin: 605 202 719
+                </a>
+                <a href="#moduly" class="btn-secondary">
+                    <i class="fas fa-flask"></i>
+                    Poznaj eksperymenty
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section about" id="o-nas">
+        <div class="section-container">
+            <div class="about-grid reveal">
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&h=600&fit=crop" alt="Eksperymenty fizyczne dla dzieci - laboratorium naukowe">
+                </div>
+                <div class="about-content">
+                    <div class="section-tag">O nas</div>
+                    <h2>Nauka przez zabawę – <br>to nasza specjalność!</h2>
+                    <p>
+                        <strong>Fizyka dla Smyka Kraków</strong> to wyjątkowe pokazy naukowe, w trakcie których dzieci 
+                        nie tylko oglądają eksperymenty – <strong>same je przeprowadzają!</strong> W czasie jednego spotkania 
+                        realizujemy kilkanaście doświadczeń fizycznych z wykorzystaniem oryginalnych, profesjonalnych zestawów edukacyjnych.
+                    </p>
+                    <p>
+                        Podobne eksperymenty można zobaczyć w Centrum Nauki „Kopernik" w Warszawie. 
+                        <strong>Różnica jest taka, że my przyjeżdżamy do Ciebie!</strong> Nie musisz organizować wycieczki – 
+                        my zabierzemy dzieci w fascynującą podróż po świecie fizyki w znajomym, bezpiecznym otoczeniu Waszej placówki.
+                    </p>
+                    <p>
+                        Wszystkie zajęcia są <strong>dostosowane do podstawy programowej</strong> i stanowią doskonałą pomoc dydaktyczną. 
+                        Nauczyciele doceniają nasze profesjonalne podejście do dzieci oraz umiejętność tłumaczenia skomplikowanych 
+                        zagadnień w przystępny, angażujący sposób.
+                    </p>
+                    
+                    <ul class="feature-list">
+                        <li>
+                            <div class="feature-icon blue">
+                                <i class="fas fa-child"></i>
+                            </div>
+                            <div>
+                                <strong>Każde dziecko bierze aktywny udział</strong>
+                                <p style="margin:0; font-size:0.9rem;">Nie ma biernych obserwatorów – wszyscy przeprowadzają doświadczenia!</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon pink">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <strong>Zgodne z podstawą programową</strong>
+                                <p style="margin:0; font-size:0.9rem;">Wspieramy edukację szkolną w angażujący sposób</p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="feature-icon green">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div>
+                                <strong>Przyjeżdżamy do Twojej placówki</strong>
+                                <p style="margin:0; font-size:0.9rem;">Oszczędzasz czas i koszty organizacji wycieczek</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modules Section -->
+    <section class="section modules" id="moduly">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-tag">Program zajęć</div>
+                <h2 class="section-title">5 fascynujących modułów tematycznych</h2>
+                <p class="section-desc">
+                    Każdy moduł to 45-60 minut pełnych emocji – do 8 doświadczeń! Dzieci odkrywają tajemnice 
+                    światła, dźwięku, powietrza, magnetyzmu i suchego lodu!
+                </p>
+            </div>
+
+            <div class="modules-grid">
+                <!-- Light Module -->
+                <div class="module-card reveal">
+                    <div class="module-image">
+                        <img src="https://mcp-tools-z-image-turbo.hf.space/--replicas/hfcjh/gradio_api/file=/tmp/gradio/2c5c75d4b0dfc323f7cb63a78f6774f3257ecbe9fdeb2ebc91cb84d283602538/image.webp" alt="Eksperymenty ze światłem - fizyka dla dzieci">
+                        <span class="module-badge badge-light">Moduł 1</span>
+                    </div>
+                    <div class="module-content">
+                        <div class="module-icon icon-light">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Tajemnice Światła</h3>
+                        <p>
+                            Wprowadzamy dzieci w zachwycający świat optyki! Razem odkryjemy, czym jest światło, 
+                            jakiego jest koloru i jakie niesamowite sztuczki potrafi.
+                        </p>
+                        <p style="font-size:0.9rem; color:#888; margin-bottom:10px;">Do 8 doświadczeń, między innymi:</p>
+                        <ul class="experiment-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>Wyczarowanie tęczy</strong> – każde dziecko tworzy własną tęczę!</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Magiczne efekty laserowe</strong> – światło w akcji</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Widzenie jak mucha</strong> – oglądamy świat wieloma oczami</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Tajemnice stroboskopu</strong> – zatrzymujemy ruch w czasie</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Test okularów UV</strong> – uczymy się rozróżniać które okulary z filtrem UV są bezpieczne dla naszych oczu</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Urządzenia sterowane światłem</strong> – technologia wokół nas</li>
+                        </ul>
+                        <div class="module-price">
+                            <span style="color:#666; font-size:0.9rem;">Cena do uzgodnienia</span>
+                            <div class="price-tag" style="font-size:1.2rem;">Zadzwoń: 605 202 719</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sound Module -->
+                <div class="module-card reveal">
+                    <div class="module-image">
+                        <img src="https://mcp-tools-z-image-turbo.hf.space/--replicas/hfcjh/gradio_api/file=/tmp/gradio/95bcb56d46fc664ae04ac08a5cd724d4924d1c84c6914eb74cfde1ea79b2a179/image.webp" alt="Eksperymenty z dźwiękiem - fizyka dla dzieci">
+                        <span class="module-badge badge-sound">Moduł 2</span>
+                    </div>
+                    <div class="module-content">
+                        <div class="module-icon icon-sound">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <h3>Tajemnice Dźwięku</h3>
+                        <p>
+                            Zanurzamy się w świat fal akustycznych! Dzieci dowiedzą się, czym jest dźwięk, 
+                            jak się rozchodzi i jakie niespodzianki kryje akustyka.
+                        </p>
+                        <p style="font-size:0.9rem; color:#888; margin-bottom:10px;">Do 8 doświadczeń, między innymi:</p>
+                        <ul class="experiment-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>Wywołanie burzy</strong> – dźwiękowe efekty specjalne</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Rezonans akustyczny</strong> – kiedy dźwięk nabiera mocy</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Pompa próżniowa</strong> – co zostaje bez powietrza?</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Dzwonienie do Cioci w Australii</strong> – jak działa telefon</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Podsłuch policyjny</strong> – dzieci jako detektywi</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Sonometr w akcji</strong> – mierzymy natężenie dźwięku w naszej szkole</li>
+                        </ul>
+                        <div class="module-price">
+                            <span style="color:#666; font-size:0.9rem;">Cena do uzgodnienia</span>
+                            <div class="price-tag" style="font-size:1.2rem;">Zadzwoń: 605 202 719</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Air Module -->
+                <div class="module-card reveal">
+                    <div class="module-image">
+                        <img src="https://mcp-tools-z-image-turbo.hf.space/--replicas/hfcjh/gradio_api/file=/tmp/gradio/109c71920f888dca4daf5f4ffb77e049d17a8d7105fa7872c45af7a43b62923a/image.webp" alt="Eksperymenty z powietrzem - fizyka dla dzieci">
+                        <span class="module-badge badge-air">Moduł 3</span>
+                    </div>
+                    <div class="module-content">
+                        <div class="module-icon icon-air">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <h3>Tajemnice Powietrza</h3>
+                        <p>
+                            Powietrze wokół nas jest pełne niespodzianek! Pokażemy dzieciom, że to, 
+                            czego nie widać, może mieć ogromną siłę.
+                        </p>
+                        <p style="font-size:0.9rem; color:#888; margin-bottom:10px;">Do 8 doświadczeń, między innymi:</p>
+                        <ul class="experiment-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>Składniki powietrza</strong> – co wdychamy każdego dnia</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Ile waży powietrze?</strong> – ważymy powietrze w sali!</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Zapasy z ciśnieniem</strong> – kto wygra z atmosferą?</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Termometr miłości</strong> – mierzymy uczucia</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Skafandry astronautów</strong> – dlaczego są potrzebne?</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Dlaczego samoloty latają?</strong> – siła nośna w akcji</li>
+                        </ul>
+                        <div class="module-price">
+                            <span style="color:#666; font-size:0.9rem;">Cena do uzgodnienia</span>
+                            <div class="price-tag" style="font-size:1.2rem;">Zadzwoń: 605 202 719</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Magnetism Module -->
+                <div class="module-card reveal">
+                    <div class="module-image">
+                        <img src="https://mcp-tools-z-image-turbo.hf.space/--replicas/hfcjh/gradio_api/file=/tmp/gradio/17aa0ae167f1e1ce063bd05faac1a83bffc0205957ad07297312837099cdb9fd/image.webp" alt="Eksperymenty z magnetyzmem - fizyka dla dzieci">
+                        <span class="module-badge badge-magnet">Moduł 4</span>
+                    </div>
+                    <div class="module-content">
+                        <div class="module-icon icon-magnet">
+                            <i class="fas fa-magnet"></i>
+                        </div>
+                        <h3>Tajemnice Magnetyzmu</h3>
+                        <p>
+                            Magnetyzm to magia, którą można wyjaśnić naukowo! Dzieci zobaczą, 
+                            jak pole magnetyczne potrafi zadziwiać.
+                        </p>
+                        <p style="font-size:0.9rem; color:#888; margin-bottom:10px;">Do 8 doświadczeń, między innymi:</p>
+                        <ul class="experiment-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>Lewitujący długopis</strong> – zawisa w powietrzu!</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Poruszanie w nieskończoność</strong> – magnetyczna pętla</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Wykrywacz metalu</strong> – poszukiwanie skarbów</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Akcelerator magnetyczny</strong> – przyspieszenie bez dotyku</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Siła magnesu</strong> – jak to działa w praktyce</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Magnetyzm w codzienności</strong> – otaczające nas technologie</li>
+                        </ul>
+                        <div class="module-price">
+                            <span style="color:#666; font-size:0.9rem;">Cena do uzgodnienia</span>
+                            <div class="price-tag" style="font-size:1.2rem;">Zadzwoń: 605 202 719</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dry Ice Module -->
+                <div class="module-card reveal" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+                    <div class="module-image">
+                        <img src="https://mcp-tools-z-image-turbo.hf.space/--replicas/hfcjh/gradio_api/file=/tmp/gradio/f8410f4040c28cfa37f0e78c0dd8906ba7d4d909761afe4d4edbddda8e789929/image.webp" alt="Eksperymenty z suchym lodem - fizyka dla dzieci">
+                        <span class="module-badge badge-dryice">Moduł 5</span>
+                    </div>
+                    <div class="module-content">
+                        <div class="module-icon icon-dryice">
+                            <i class="fas fa-snowflake"></i>
+                        </div>
+                        <h3>Tajemnice Suchego Lodu</h3>
+                        <p>
+                            Najzimniejszy moduł pełen dymu i efektów! Suchy lód (stały dwutlenek węgla) 
+                            zachwyca dzieci niezwykłymi zjawiskami.
+                        </p>
+                        <p style="font-size:0.9rem; color:#888; margin-bottom:10px;">Do 8 doświadczeń, między innymi:</p>
+                        <ul class="experiment-list">
+                            <li><i class="fas fa-check-circle"></i> <strong>Czym jest Suchy Lód?</strong> – poznajemy CO₂ w stanie stałym</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Zjawisko sublimacji</strong> – z lodu prosto w gaz!</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Samonadmuchujący balon</strong> – gaz robi robotę</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Czy każdą świeczkę da się zapalić?</strong> – test CO₂</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Produkcja wody sodowej</strong> – robimy bąbelkowy napój</li>
+                            <li><i class="fas fa-check-circle"></i> <strong>Znaki dymne</strong> – porozumiewanie się jak w filmach</li>
+                        </ul>
+                        <div class="module-price">
+                            <span style="color:#666; font-size:0.9rem;">Cena do uzgodnienia</span>
+                            <div class="price-tag" style="font-size:1.2rem;">Zadzwoń: 605 202 719</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section how-it-works" id="jak-to-dziala">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-tag">Proces</div>
+                <h2 class="section-title">Jak to działa? Prościzna!</h2>
+                <p class="section-desc">
+                    W czterech prostych krokach organizujesz niezapomniane pokazy naukowe w swojej placówce.
+                </p>
+            </div>
+
+            <div class="steps-container reveal">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Zadzwoń do nas</h3>
+                    <p>
+                        Skontaktuj się z sekretariatem Akademii Nauki Kraków pod numerem 
+                        <strong>605 202 719</strong>. Omówimy dostępne terminy i wybierzemy moduły.
+                    </p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Wybierz moduły</h3>
+                    <p>
+                        Zdecyduj, które z pięciu fascynujących tematów Cię interesują. 
+                        Możesz wybrać jeden lub skorzystać z pełnej edycji wszystkich modułów.
+                    </p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>My przyjeżdżamy</h3>
+                    <p>
+                        Przywozimy cały sprzęt, zestawy edukacyjne i doświadczonych prowadzących. 
+                        Potrzebujemy tylko sali i prądu!
+                    </p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3>Dzieci odkrywają!</h3>
+                    <p>
+                        45-60 minut czystej fascynacji nauką. Każde dziecko aktywnie uczestniczy 
+                        w eksperymentach i zabiera wspomnienia na lata!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section pricing" id="oferta">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-tag" style="background: rgba(255,255,255,0.2);">Oferta</div>
+                <h2 class="section-title">Pakiety dla Twojej placówki</h2>
+                <p class="section-desc">
+                    Jeden moduł albo pełna edycja – wszystko dogadujemy indywidualnie. Zadzwoń i ustalimy najlepszą opcję!
+                </p>
+            </div>
+
+            <div class="pricing-grid reveal">
+                <div class="pricing-card">
+                    <div class="pricing-label">Standard</div>
+                    <h3>Jednorazowy moduł</h3>
+                    <div class="pricing-amount" style="font-size:1.8rem;">
+                        Cena indywidualna
+                    </div>
+                    <p style="color:rgba(255,255,255,0.7); margin-top:10px; font-size:0.95rem;">Zadzwoń po wycenę</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 45-60 minut zajęć</li>
+                        <li><i class="fas fa-check"></i> do 8 doświadczeń</li>
+                        <li><i class="fas fa-check"></i> 15-25 dzieci w grupie</li>
+                        <li><i class="fas fa-check"></i> Profesjonalny prowadzący</li>
+                        <li><i class="fas fa-check"></i> Oryginalny sprzęt edukacyjny</li>
+                        <li><i class="fas fa-check"></i> Dostosowane do wieku 3-10 lat</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-label">Pełna Edycja</div>
+                    <h3>Wszystkie 5 modułów</h3>
+                    <div class="pricing-amount" style="font-size:1.8rem;">
+                        Cena pakietowa
+                    </div>
+                    <p style="color:rgba(255,255,255,0.7); margin-top:10px; font-size:0.95rem;">Zadzwoń i dogadamy szczegóły</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> 5 kolejnych spotkań</li>
+                        <li><i class="fas fa-check"></i> Światło, Dźwięk, Powietrze</li>
+                        <li><i class="fas fa-check"></i> Magnetyzm, Suchy Lód</li>
+                        <li><i class="fas fa-check"></i> Systematyczna nauka</li>
+                        <li><i class="fas fa-check"></i> Kompleksowa wiedza</li>
+                        <li><i class="fas fa-check"></i> Zniżka w pakiecie</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-label">Premium</div>
+                    <h3>Suchy Lód</h3>
+                    <div class="pricing-amount" style="font-size:1.8rem;">
+                        Cena indywidualna
+                    </div>
+                    <p style="color:rgba(255,255,255,0.7); margin-top:10px; font-size:0.95rem;">Zadzwoń po wycenę</p>
+                    <ul class="pricing-features">
+                        <li><i class="fas fa-check"></i> Efektowne doświadczenia</li>
+                        <li><i class="fas fa-check"></i> Sublimacja na żywo</li>
+                        <li><i class="fas fa-check"></i> Samonadmuchujący balon</li>
+                        <li><i class="fas fa-check"></i> Produkcja wody sodowej – bąbelkowy napój</li>
+                        <li><i class="fas fa-check"></i> Znaki dymne</li>
+                        <li><i class="fas fa-check"></i> Najbardziej widowiskowy moduł</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; color: rgba(255,255,255,0.7);">
+                <p style="font-size: 0.95rem;">
+                    <i class="fas fa-info-circle"></i> 
+                    W jednym dniu przeprowadzamy 3-4 zajęcia. W każdym może uczestniczyć jedna klasa (15-25 dzieci).
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section testimonials">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-tag">Opinie</div>
+                <h2 class="section-title">Co mówią o nas nauczyciele?</h2>
+                <p class="section-desc">
+                    Setki zadowolonych placówek i tysiące zachwyconych dzieci. Sprawdź, dlaczego nas polecają!
+                </p>
+            </div>
+
+            <div class="testimonials-grid reveal">
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        Pokaz magnetyzmu był absolutnym hitem! Dzieci do dziś opowiadają o lewitującym długopisie. 
+                        Prowadzący ma niesamowite podejście do dzieci – potrafi zaciekawić nawet najmłodszych. 
+                        Polecam każdej placówce!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background: var(--gradient-1);">B</div>
+                        <div class="author-info">
+                            <h4>Nauczycielka</h4>
+                            <p>Kraków</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        Zajęcia z suchego lodu przeszły nasze najśmielsze oczekiwania. Dzieci były zachwycone, 
+                        a ja jako nauczyciel doceniam, że wszystko jest zgodne z podstawą programową. 
+                        Świetna pomoc dydaktyczna!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background: var(--gradient-2);">S</div>
+                        <div class="author-info">
+                            <h4>Nauczyciel</h4>
+                            <p>Kraków</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        Pełna edycja wszystkich 5 modułów to najlepsza inwestycja w edukację naszych dzieci. 
+                        Systematyczne spotkania budowały prawdziwą ciekawość nauki. 
+                        Fizyka przestała być 'trudna' – stała się fascynująca!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar" style="background: var(--gradient-3);">K</div>
+                        <div class="author-info">
+                            <h4>Wychowawca</h4>
+                            <p>Kraków</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section faq" id="faq">
+        <div class="section-container">
+            <div class="section-header reveal">
+                <div class="section-tag">FAQ</div>
+                <h2 class="section-title">Najczęściej zadawane pytania</h2>
+                <p class="section-desc">
+                    Znajdź odpowiedzi na najważniejsze pytania przed rezerwacją terminu.
+                </p>
+            </div>
+
+            <div class="faq-list reveal">
+                <div class="faq-item active">
+                    <div class="faq-question">
+                        Dla jakiego wieku są przeznaczone zajęcia?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Zajęcia "Fizyka dla Smyka" są dostosowane do dzieci w wieku <strong>3-10 lat</strong>. 
+                            Każdy moduł prowadzimy w sposób dopasowany do wieku grupy – dla przedszkolaków 
+                            stawiamy na zabawę i pokaz, dla starszych dzieci wprowadzamy więcej wyjaśnień 
+                            naukowych i zachęcamy do samodzielnego wnioskowania.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Ile dzieci może uczestniczyć w jednych zajęciach?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            W jednych zajęciach może wziąć udział <strong>jedna klasa lub grupa od 15 do 25 dzieci</strong>. 
+                            Taki podział zapewnia, że każde dziecko ma szansę aktywnie uczestniczyć w eksperymentach 
+                            i bezpośrednio współpracować z prowadzącym.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Czy potrzebujemy specjalnego pomieszczenia?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Nie! Przyjeżdżamy z własnym sprzętem i potrzebujemy jedynie <strong>sali z dostępem do prądu</strong>. 
+                            Wszystkie eksperymenty są bezpieczne i dostosowane do pracy w przedszkolu, szkole 
+                            czy świetlicy. W przypadku modułu z suchym lodem zapewniamy dodatkowe zabezpieczenia.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Ile zajęć można zorganizować w jednym dniu?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            W jednym dniu przeprowadzamy <strong>3-4 zajęcia</strong>. Każde trwa od 45 do 60 minut. 
+                            Jest to idealne rozwiązanie dla szkół – można zorganizować pokazy dla kilku klas 
+                            w ciągu jednego dnia bez konieczności wielokrotnego przyjazdu.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Czy zajęcia są bezpieczne dla dzieci?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            <strong>Bezpieczeństwo jest naszym priorytetem.</strong> Wszystkie eksperymenty są starannie 
+                            dobrane do wieku dzieci i przeprowadzane pod czujnym okiem doświadczonych prowadzących. 
+                            Używamy wyłącznie sprawdzonych, profesjonalnych zestawów edukacyjnych. 
+                            Laser w module światła ma odpowiednią moc dla dzieci, a suchy lód obsługiwany 
+                            jest z zachowaniem wszystkich zasad bezpieczeństwa.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Jak zarezerwować termin?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>
+                            Rezerwacji dokonujesz wyłącznie <strong>telefonicznie przez sekretariat Akademii Nauki Kraków</strong>. 
+                            Zadzwoń pod numer <strong>605 202 719</strong> – podamy dostępne terminy, omówimy wybór modułów 
+                            i ustalimy szczegóły. Nie przyjmujemy rezerwacji mailowych – telefon to najszybszy 
+                            sposób na dopięcie wszystkiego na ostatni guzik!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section contact" id="kontakt">
+        <div class="section-container">
+            <div class="contact-wrapper reveal">
+                <div class="contact-info">
+                    <div class="section-tag">Kontakt</div>
+                    <h2>Zarezerwuj pokazy naukowe już dziś!</h2>
+                    <p>
+                        Jesteśmy do Twojej dyspozycji. Zadzwoń do sekretariatu Akademii Nauki Kraków, 
+                        a pomożemy Ci wybrać najlepsze moduły i dogodny termin. Pamiętaj – <strong>wszystko załatwisz telefonicznie</strong>, 
+                        bez zbędnej papierkowej roboty!
+                    </p>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div>
+                            <h4>Telefon do sekretariatu</h4>
+                            <p>Jedyny sposób rezerwacji i kontaktu</p>
+                            <a href="tel:605202719" class="phone-highlight">605 202 719</a>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div>
+                            <h4>Akademia Nauki Kraków</h4>
+                            <p>Sekretariat obsługuje rezerwacje i udziela informacji</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h4>Zasięg działania</h4>
+                            <p>Kraków – przyjeżdżamy do Twojej placówki</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-visual">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop" alt="Dzieci podczas zajęć edukacyjnych - nauka przez zabawę">
+                    <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); background: var(--white); padding: 20px 40px; border-radius: 20px; box-shadow: var(--shadow-hover); text-align: center;">
+                        <div style="font-family: 'Fredoka', sans-serif; font-size: 1.3rem; color: var(--primary); margin-bottom: 5px;">
+                            <i class="fas fa-phone"></i> Zadzwoń teraz!
+                        </div>
+                        <a href="tel:605202719" style="font-family: 'Fredoka', sans-serif; font-size: 2rem; color: var(--dark); text-decoration: none; font-weight: 700;">
+                            605 202 719
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+        <div class="cta-content">
+            <h2>Nie czekaj – nauka czeka na Twoje dzieci!</h2>
+            <p>
+                Terminy na popularne moduły (szczególnie Suchy Lód!) rozchodzą się jak świeże bułeczki. 
+                Zadzwoń do sekretariatu i zarezerwuj najlepszy moment dla swojej placówki.
+            </p>
+            <a href="tel:605202719" class="cta-phone pulse-phone">
+                <i class="fas fa-phone-alt"></i>
+                605 202 719
+            </a>
+            <p style="margin-top: 20px; font-size: 0.9rem; opacity: 0.8;">
+                <i class="fas fa-clock"></i> Sekretariat czynny w godzinach pracy | <i class="fas fa-check-circle"></i> Szybka rezerwacja telefoniczna
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3><i class="fas fa-atom"></i> Fizyka dla Smyka</h3>
+                <p>
+                    Interaktywne pokazy naukowe dla dzieci w wieku 3-10 lat. 
+                    Przyjeżdżamy do przedszkoli, szkół i placówek edukacyjnych w Krakowie. 
+                    Nauka przez zabawę to nasza pasja!
+                </p>
+            </div>
+            <div class="footer-links">
+                <h4>Nawigacja</h4>
+                <ul>
+                    <li><a href="#o-nas">O nas</a></li>
+                    <li><a href="#moduly">Moduły</a></li>
+                    <li><a href="#jak-to-dziala">Jak to działa</a></li>
+                    <li><a href="#oferta">Oferta</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Moduły</h4>
+                <ul>
+                    <li><a href="#moduly">Tajemnice Światła</a></li>
+                    <li><a href="#moduly">Tajemnice Dźwięku</a></li>
+                    <li><a href="#moduly">Tajemnice Powietrza</a></li>
+                    <li><a href="#moduly">Tajemnice Magnetyzmu</a></li>
+                    <li><a href="#moduly">Tajemnice Suchego Lodu</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Kontakt</h4>
+                <ul>
+                    <li><a href="tel:605202719"><i class="fas fa-phone"></i> 605 202 719</a></li>
+                    <li><span style="color: rgba(255,255,255,0.6);"><i class="fas fa-building"></i> Sekretariat Akademii Nauki Kraków</span></li>
+                    <li><span style="color: rgba(255,255,255,0.6);"><i class="fas fa-map-marker-alt"></i> Kraków</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p> Fizyka dla Smyka Kraków – Akademia Nauki. Wszelkie prawa zastrzeżone.</p>
+            <p style="margin-top: 10px; font-size: 0.85rem;">
+                Informacje oraz rezerwacja wyłącznie telefonicznie: <a href="tel:605202719" style="color: var(--accent); text-decoration: none;">605 202 719</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top -->
+    <div class="scroll-top" id="scrollTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const colors = ['#667eea', '#f093fb', '#4ECDC4', '#FFE66D', '#FF6B35'];
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const size = Math.random() * 10 + 5;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const closeMenu = document.getElementById('closeMenu');
+
+        function toggleMenu() {
+            mobileMenu.classList.toggle('active');
+            mobileOverlay.classList.toggle('active');
+        }
+
+        hamburger.addEventListener('click', toggleMenu);
+        closeMenu.addEventListener('click', toggleMenu);
+        mobileOverlay.addEventListener('click', toggleMenu);
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', toggleMenu);
+        });
+
+        // Scroll reveal animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', reveal);
+        reveal();
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                // Open clicked if wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Scroll to top
+        const scrollTop = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+
+        scrollTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Animate stats on load
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.textContent);
+                if (!isNaN(target)) {
+                    let current = 0;
+                    const increment = target / 50;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            stat.textContent = target + (stat.textContent.includes('%') ? '%' : (stat.textContent.includes('+') ? '+' : ''));
+                            clearInterval(timer);
+                        } else {
+                            stat.textContent = Math.floor(current) + (stat.textContent.includes('%') ? '%' : (stat.textContent.includes('+') ? '+' : ''));
+                        }
+                    }, 30);
+                }
+            });
+        }
+        
+        // Trigger stats animation when hero is visible
+        setTimeout(animateStats, 1000);
+    </script>
+</body>
+</html>
